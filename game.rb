@@ -12,19 +12,16 @@ class Game
 
         while !@gameboard.won?
 
-            system('clear')
             @gameboard.render
             print "Guess a position (format: numbernumber): "
             guess1 = self.get_guess
             @gameboard.switch(guess1)
 
-            system('clear')
             @gameboard.render
             print "Guess another position: "
             guess2 = self.get_guess
             @gameboard.switch(guess2)
 
-            system('clear')
             @gameboard.render
             sleep(1)
             if @gameboard.value_at(guess1) != @gameboard.value_at(guess2)
