@@ -1,25 +1,27 @@
 require_relative './board.rb'
 require_relative './card.rb'
+require_relative './player.rb'
 
 class Game
     
     def initialize(size=4)
         @gameboard = Board.new(size)
         @gameboard.populate_board
+        @player
     end
     
     def play
 
+        self.start_game
+        
         while !@gameboard.won?
 
             @gameboard.render
-            print "Guess a position (format: numbernumber): "
-            guess1 = self.get_guess
+            guess1 = @player.get_guess
             @gameboard.switch(guess1)
 
             @gameboard.render
-            print "Guess another position: "
-            guess2 = self.get_guess
+            guess2 = @player.get_guess
             @gameboard.switch(guess2)
 
             @gameboard.render
@@ -35,35 +37,24 @@ class Game
 
     end
 
-    def get_guess
-        
+    def start_game
+
+        print "Who's playing? Enter \"me\" or \"AI\": "
         input = gets.chomp
-        while valid_input?(input) == false
-            print "Invalid guess. Try again: "
-            input = gets.chomp
+        if input == "me"
+            print "Enter your name: "
+            name = gets.chomp
+            @player = Player.new(name, @gameboard)
+        elsif input == "AI"
+            @player = AI.new
+        else
+            print "Wrong entry."
         end
-        guess = guess_to_array(input)
-        while @gameboard.valid_guess?(guess) == false
-            print "Invalid guess. Try again: "
-            input = gets.chomp
-            guess = guess_to_array(input)
-        end
 
-        return guess
     end
-
-    def guess_to_array(input)
-        guess = input.split("")
-        guess.map!(&:to_i)
-        return guess
-    end
-
-    def valid_input?(input)
-        digits = "0123456789"
-        return false if !digits.include?(input[0])
-        return false if !digits.include?(input[1])
-        return false if input.length > 2
-        true
-    end
-
 end
+
+# code for quick testing
+
+g = Game.new(2)
+g.play
