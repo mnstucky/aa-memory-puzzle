@@ -1,6 +1,7 @@
 require_relative './board.rb'
 require_relative './card.rb'
 require_relative './player.rb'
+require_relative './ai.rb'
 
 class Game
     
@@ -19,11 +20,11 @@ class Game
             @gameboard.render
             guess1 = @player.get_guess
             @gameboard.switch(guess1)
-
+            sleep(1)
             @gameboard.render
             guess2 = @player.get_guess
             @gameboard.switch(guess2)
-
+            sleep(1)
             @gameboard.render
             sleep(1)
             if @gameboard.value_at(guess1) != @gameboard.value_at(guess2)
@@ -46,7 +47,7 @@ class Game
             name = gets.chomp
             @player = Player.new(name, @gameboard)
         elsif input == "AI"
-            @player = AI.new
+            @player = Ai.new("Linus", @gameboard)
         else
             print "Wrong entry."
         end
