@@ -46,4 +46,8 @@ class Player
         true
     end
 
+    def delete_match(guess1, guess2)
+
+    end
+
 end

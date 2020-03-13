@@ -12,6 +12,7 @@ class Ai
         @guess_num = 0
         @match
         @match_exists
+        @just_found_match
     end
         
     def populate_guesses
@@ -22,7 +23,7 @@ class Ai
 
     def get_guess
 
-        # debugger
+        debuggerAI
         @match_exists = false
         @known_cards.each { |k, v| @match_exists = true if v.length > 1 }
         
@@ -30,14 +31,14 @@ class Ai
 
             if @match_exists
                 @known_cards.each { |k, v| @match = v if v.length > 1 }
-                @new_guesses.delete(@match[0])
-                self.switch_guess_num
+                self.process_guess(@match[0])
+                @just_found_match = false
                 return @match[0] 
             else 
                 guess = @new_guesses.sample
                 @known_cards[@gameboard.value_at(guess)] << guess
-                @new_guesses.delete(guess)
-                self.switch_guess_num
+                self.process_guess(guess)
+                @just_found_match = true
                 return guess
             end
 
@@ -50,16 +51,18 @@ class Ai
                         @match = v 
                     end
                 end
-                @new_guesses.delete(@match[1])
-                self.switch_guess_num
-                @known_cards.delete(@known_cards.key(@match))
-                return @match[1] 
+                self.process_guess(@match[1])
+
+                if @just_found_match == false
+                    return @match[1] 
+                else
+                    return @match[0]
+                end
                
             else
                 guess = @new_guesses.sample
                 @known_cards[@gameboard.value_at(guess)] << guess
-                @new_guesses.delete(guess)
-                self.switch_guess_num
+                self.process_guess(guess)
                 return guess   
             end          
         
@@ -67,6 +70,15 @@ class Ai
 
     end
 
+    def delete_match(guess1, guess2)
+        @known_cards.delete(@known_cards.key([guess1, guess2]))
+    end
+
+    def process_guess(guess)
+        @new_guesses.delete(guess)
+        self.switch_guess_num
+    end
+    
     def switch_guess_num
 
         if @guess_num == 0

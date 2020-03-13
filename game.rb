@@ -30,6 +30,8 @@ class Game
             if @gameboard.value_at(guess1) != @gameboard.value_at(guess2)
                 @gameboard.switch(guess1)
                 @gameboard.switch(guess2)
+            else
+                @player.delete_match(guess1, guess2)
             end
             system('clear')
         end
