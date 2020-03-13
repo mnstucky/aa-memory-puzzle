@@ -20,11 +20,9 @@ class Game
             @gameboard.render
             guess1 = @player.get_guess
             @gameboard.switch(guess1)
-            sleep(1)
             @gameboard.render
             guess2 = @player.get_guess
             @gameboard.switch(guess2)
-            sleep(1)
             @gameboard.render
             sleep(1)
             if @gameboard.value_at(guess1) != @gameboard.value_at(guess2)
@@ -32,6 +30,7 @@ class Game
                 @gameboard.switch(guess2)
             else
                 @player.delete_match(guess1, guess2)
+                @player.delete_match(guess2, guess1)
             end
             system('clear')
         end
@@ -59,5 +58,5 @@ end
 
 # code for quick testing
 
-g = Game.new(2)
+g = Game.new(4)
 g.play

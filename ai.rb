@@ -23,7 +23,6 @@ class Ai
 
     def get_guess
 
-        debuggerAI
         @match_exists = false
         @known_cards.each { |k, v| @match_exists = true if v.length > 1 }
         
@@ -45,7 +44,7 @@ class Ai
         else
 
             if @match_exists
-                # debugger
+                
                 @known_cards.each do |k, v| 
                     if v.length > 1 
                         @match = v 
