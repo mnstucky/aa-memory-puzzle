@@ -1,5 +1,4 @@
 require_relative './board.rb'
-require 'byebug'
 
 class Ai
 
@@ -23,11 +22,11 @@ class Ai
 
     def get_guess
 
-        @match_exists = false
-        @known_cards.each { |k, v| @match_exists = true if v.length > 1 }
+        self.check_for_matches
+
+        # First computer guess
         
         if @guess_num == 0
-
             if @match_exists
                 @known_cards.each { |k, v| @match = v if v.length > 1 }
                 self.process_guess(@match[0])
@@ -40,24 +39,22 @@ class Ai
                 @just_found_match = true
                 return guess
             end
-
         else
 
+        # Second computer guess
+
             if @match_exists
-                
                 @known_cards.each do |k, v| 
                     if v.length > 1 
                         @match = v 
                     end
                 end
                 self.process_guess(@match[1])
-
                 if @just_found_match == false
                     return @match[1] 
                 else
                     return @match[0]
                 end
-               
             else
                 guess = @new_guesses.sample
                 @known_cards[@gameboard.value_at(guess)] << guess
@@ -69,6 +66,11 @@ class Ai
 
     end
 
+    def check_for_matches
+        @match_exists = false
+        @known_cards.each { |k, v| @match_exists = true if v.length > 1 }
+    end
+    
     def delete_match(guess1, guess2)
         @known_cards.delete(@known_cards.key([guess1, guess2]))
     end
